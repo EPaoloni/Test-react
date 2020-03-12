@@ -1,0 +1,12 @@
+import React from 'react';
+import Pokedex from '../Pokedex/Pokedex';
+
+class App extends React.Component{
+    render(){
+        return(
+            <Pokedex/>
+        );
+    }
+}
+
+export default App;
