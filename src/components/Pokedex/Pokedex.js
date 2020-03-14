@@ -18,7 +18,6 @@ class Pokedex extends React.Component{
             .then((data) => {
                 this.setState({next: data.next})
                 this.setState({pokemons: this.state.pokemons.concat(data.results)})
-                console.log("this.state.pokemons", this.state.pokemons)
             })
     }
 
