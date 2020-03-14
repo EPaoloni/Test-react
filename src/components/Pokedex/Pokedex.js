@@ -1,38 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PokemonList from '../PokemonList/PokemonList'
 
-class Pokedex extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {pokemons: [],
-                        next: ""};
-    }
+function Pokedex(props){
 
-    componentDidMount(){
-        this.fetchPokemons("https://pokeapi.co/api/v2/pokemon");
-    }
+    const [pokemons, setPokemons] = useState([]);
+    const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon");
+    const [nextUrl, setNextUrl] = useState("");
 
-    fetchPokemons(url){
+
+
+    // UseEffect se ejecuta luego de algun evento, como DidMount, DidUpdate o WillUnmount
+    // Le podemos pasar un segundo parametro con una lista de dependencias, que hacen que se vuelva a ejecutar si cambian esas dependencias
+    useEffect(() => {
+        fetchPokemons(url);
+    }, [url]);
+
+    function fetchPokemons(url){
         fetch(url)
             .then(res => res.json())
             .then((data) => {
-                this.setState({next: data.next})
-                this.setState({pokemons: this.state.pokemons.concat(data.results)})
+                setPokemons(data.results)
+                setNextUrl(data.next)
             })
     }
 
-    nextPokemons(){
-        this.fetchPokemons(this.state.next);
+    function updateUrl(url){
+        setUrl(url)
     }
 
-    render(){
-        return(
-            <div>
-                <PokemonList pokemons={this.state.pokemons}/>
-                <button className="btn btn-primary" onClick={() => {this.nextPokemons()}}>More</button>
-            </div>
-        );
-    }
+    return(
+        <div>
+            <button className="btn btn-primary" onClick={() => {updateUrl(nextUrl)}}>Next</button>
+            <PokemonList pokemons={pokemons}/>
+        </div>
+    );
 }
 
 export default Pokedex;
